@@ -12,7 +12,7 @@ A TamperMonkey script that adds video playback speed control to the CambriLearn 
 ## Installation
 
 1. Install the TamperMonkey browser extension
-2. Create a new script in TamperMonkey
+2. Create a new script in TamperMonkey (Note: Remember to turn on Developer Mode for your Browser Plugin to allow TamperMoney to inject code. See https://www.tampermonkey.net/faq.php#Q209)
 3. Copy the contents of `TamperMonkeyScript.js` into the new script
 4. Save the script
 5. Navigate to CambriLearn and enjoy variable speed control!
@@ -28,14 +28,6 @@ Based on MediaElementJS : Change Speed
 Modified the embeded media player to include the speed plugin to handle speed changes on click.
 
 ![](https://github.com/d3xtr4/cambrilearn-speedcontrol/blob/main/controller.png?raw=true)
-
-### Usage
-
-####1 Install TamperMonkey into your browser
-https://chromewebstore.google.com/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf
-
-####2 Copy TamperMonkeyScript.js content into the TamperMonkey Plugin as a new Script. - Note: Remember to turn on Developer Mode for your Browser Plugin to allow TamperMoney to inject code. See https://www.tampermonkey.net/faq.php#Q209
-
 
 ### Explanation
 The script is injecting the SpeedChange script into the browser. It then proceed to override the MediaPlayer Initialisation Prototype and add the Spped Change Feature into the player so that whenever the Player is iniciated it will show the speed in the controller. 
