@@ -27,7 +27,7 @@ Based on MediaElementJS : Change Speed
 
 Modified the embeded media player to include the speed plugin to handle speed changes on click.
 
-![](https://user-images.githubusercontent.com/52452/60034563-3c7e6080-96ab-11e9-81bd-582adc4d7462.gif)
+![](https://github.com/d3xtr4/cambrilearn-speedcontrol/blob/main/controller.png?raw=true)
 
 ### Usage
 
