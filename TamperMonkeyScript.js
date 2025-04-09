@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         Speed Button for MediaElementPlayer
-// @namespace    http://tampermonkey.net/
 // @version      1.2
-// @description  Adds a speed control button to MediaElementPlayer with fallback if buildspeed is unavailable
-// @author       Peter
+// @description  Adds a speed control button to MediaElementPlayer with fallback if buildspeed is unavailable. Enjoy your 2x learning.
+// @author       D3xtr4
 // @match        https://www.cambrilearn.com/*
-// @grant        none
+// @grant        Public
 // ==/UserScript==
 
 "use strict";
