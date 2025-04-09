@@ -15,6 +15,8 @@ console.log('TamperMonkey Speed Control Script Loaded');
 const style = document.createElement('style');
 style.textContent = `
 .mejs__speed-button {
+    background: transparent;
+    color: #fff;
     font-size: 10px;
     height: 40px;
     line-height: 10px;
@@ -22,6 +24,8 @@ style.textContent = `
     width: 32px;
 }
 .mejs__speed-button button {
+    background: transparent;
+    color: #fff;
     font-size: 10px;
     height: 40px;
     line-height: 10px;
