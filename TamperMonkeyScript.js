@@ -11,7 +11,7 @@
 
 console.log('TamperMonkey Speed Control Script Loaded');
 
-// Add custom CSS for speed control button
+// Add custom CSS for speed control button and overlay
 const style = document.createElement('style');
 style.textContent = `
 .mejs__speed-button {
@@ -35,6 +35,33 @@ style.textContent = `
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.mejs__speed-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.mejs__speed-overlay.show {
+    opacity: 1;
+}
+
+.mejs__speed-overlay-text {
+    color: white;
+    font-size: 45px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 `;
 document.head.appendChild(style);
@@ -158,12 +185,31 @@ Object.assign(MediaElementPlayer.prototype, {
 
     t.addControlElement(player.speedButton);
 
+    // Create speed overlay
+    const speedOverlay = document.createElement('div');
+    speedOverlay.className = 'mejs__speed-overlay';
+    const speedText = document.createElement('div');
+    speedText.className = 'mejs__speed-overlay-text';
+    speedOverlay.appendChild(speedText);
+    t.container.appendChild(speedOverlay);
+
+    // Function to show speed overlay
+    const showSpeedOverlay = (speed) => {
+      speedText.textContent = `${speed}x`;
+      speedOverlay.classList.add('show');
+      setTimeout(() => {
+        speedOverlay.classList.remove('show');
+      }, 500);
+    };
+
     player.speedButton.addEventListener("click", function() {
       index++;
       index %= speeds.length;
-      media.playbackRate = parseFloat(speeds[index].value);
-      this.firstElementChild.innerText = speeds[index].value + 'x';
-      console.log('Speed changed to:', speeds[index].value);
+      const newSpeed = speeds[index].value;
+      media.playbackRate = parseFloat(newSpeed);
+      this.firstElementChild.innerText = newSpeed + 'x';
+      showSpeedOverlay(newSpeed);
+      console.log('Speed changed to:', newSpeed);
     });
 
     media.addEventListener("loadedmetadata", () => {
