@@ -17,7 +17,7 @@ style.textContent = `
 .mejs__speed-button {
     background: transparent;
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
     height: 40px;
     line-height: 10px;
     margin: 0;
@@ -26,7 +26,7 @@ style.textContent = `
 .mejs__speed-button button {
     background: transparent;
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
     height: 40px;
     line-height: 10px;
     margin: 0;
@@ -63,6 +63,34 @@ style.textContent = `
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+
+.mejs__jumpback-button,
+.mejs__jumpforward-button {
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 10px;
+    margin: 0;
+    width: 32px;
+}
+
+.mejs__jumpback-button button,
+.mejs__jumpforward-button button {
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 10px;
+    margin: 0;
+    width: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 `;
 document.head.appendChild(style);
 
@@ -97,6 +125,108 @@ Object.assign(MediaElementPlayer.prototype, {
    * @param {HTMLElement} layers
    * @param {HTMLElement} media
    */
+  
+
+  buildjumpback(player, controls, layers, media) {
+    console.log('Building jump back feature');
+    const t = this;
+    const jumpBackButton = document.createElement('div');
+    jumpBackButton.className = `${t.options.classPrefix}button ${t.options.classPrefix}jumpback-button`;
+    jumpBackButton.innerHTML = `<button type="button" aria-controls="${t.id}" title="Jump Back" aria-label="Jump Back" tabindex="0"><<</button>`;
+    
+    t.addControlElement(jumpBackButton);
+
+    // Create shared jump overlay if it doesn't exist
+    if (!t.jumpOverlay) {
+      console.log('Creating new jump overlay for jumpback');
+      t.jumpOverlay = document.createElement('div');
+      t.jumpOverlay.className = 'mejs__speed-overlay';
+      t.jumpText = document.createElement('div');
+      t.jumpText.className = 'mejs__speed-overlay-text';
+      t.jumpOverlay.appendChild(t.jumpText);
+      t.container.appendChild(t.jumpOverlay);
+      console.log('Jump overlay created and added to container:', t.jumpOverlay);
+    } else {
+      console.log('Using existing jump overlay for jumpback:', t.jumpOverlay);
+    }
+
+    // Function to show jump overlay
+    const showJumpOverlay = (text) => {
+      console.log('Showing jump overlay with text:', text);
+      console.log('Current overlay state:', {
+        overlay: t.jumpOverlay,
+        text: t.jumpText,
+        container: t.container
+      });
+      t.jumpText.textContent = text;
+      t.jumpOverlay.classList.add('show');
+      console.log('Overlay classes after adding show:', t.jumpOverlay.classList);
+      setTimeout(() => {
+        t.jumpOverlay.classList.remove('show');
+        console.log('Overlay hidden after timeout');
+      }, 500);
+    };
+
+    jumpBackButton.addEventListener('click', function() {
+      console.log('Jump back button clicked');
+      const currentTime = media.currentTime;
+      const newTime = Math.max(0, currentTime - t.options.jumpBackInterval);
+      media.currentTime = newTime;
+      showJumpOverlay('back 15 s');
+      console.log('Jumped back to:', newTime);
+    });
+  },
+
+  buildjumpforward(player, controls, layers, media) {
+    console.log('Building jump forward feature');
+    const t = this;
+    const jumpForwardButton = document.createElement('div');
+    jumpForwardButton.className = `${t.options.classPrefix}button ${t.options.classPrefix}jumpforward-button`;
+    jumpForwardButton.innerHTML = `<button type="button" aria-controls="${t.id}" title="Jump Forward" aria-label="Jump Forward" tabindex="0">>></button>`;
+    
+    t.addControlElement(jumpForwardButton);
+
+    // Use existing jump overlay if it exists
+    if (!t.jumpOverlay) {
+      console.log('Creating new jump overlay for jumpforward');
+      t.jumpOverlay = document.createElement('div');
+      t.jumpOverlay.className = 'mejs__speed-overlay';
+      t.jumpText = document.createElement('div');
+      t.jumpText.className = 'mejs__speed-overlay-text';
+      t.jumpOverlay.appendChild(t.jumpText);
+      t.container.appendChild(t.jumpOverlay);
+      console.log('Jump overlay created and added to container:', t.jumpOverlay);
+    } else {
+      console.log('Using existing jump overlay for jumpforward:', t.jumpOverlay);
+    }
+
+    // Function to show jump overlay
+    const showJumpOverlay = (text) => {
+      console.log('Showing jump overlay with text:', text);
+      console.log('Current overlay state:', {
+        overlay: t.jumpOverlay,
+        text: t.jumpText,
+        container: t.container
+      });
+      t.jumpText.textContent = text;
+      t.jumpOverlay.classList.add('show');
+      console.log('Overlay classes after adding show:', t.jumpOverlay.classList);
+      setTimeout(() => {
+        t.jumpOverlay.classList.remove('show');
+        console.log('Overlay hidden after timeout');
+      }, 500);
+    };
+
+    jumpForwardButton.addEventListener('click', function() {
+      console.log('Jump forward button clicked');
+      const currentTime = media.currentTime;
+      const newTime = Math.min(media.duration, currentTime + t.options.jumpForwardInterval);
+      media.currentTime = newTime;
+      showJumpOverlay('forward 15 s');
+      console.log('Jumped forward to:', newTime);
+    });
+  },
+
   buildchangespeed(player, controls, layers, media) {
     console.log('Building speed control feature');
     const t = this;
@@ -241,6 +371,33 @@ Object.assign(MediaElementPlayer.prototype, {
         player.speedSelector.parentNode.removeChild(player.speedSelector);
       }
     }
+  },
+
+  cleanjumpback(player, controls, layers, media) {
+    console.log('Cleaning up jump back feature');
+    if (player) {
+      const jumpBackButton = player.container.querySelector(`.${player.options.classPrefix}jumpback-button`);
+      if (jumpBackButton) {
+        jumpBackButton.parentNode.removeChild(jumpBackButton);
+      }
+      // Don't remove the overlay here as it's shared with jumpforward
+    }
+  },
+
+  cleanjumpforward(player, controls, layers, media) {
+    console.log('Cleaning up jump forward feature');
+    if (player) {
+      const jumpForwardButton = player.container.querySelector(`.${player.options.classPrefix}jumpforward-button`);
+      if (jumpForwardButton) {
+        jumpForwardButton.parentNode.removeChild(jumpForwardButton);
+      }
+      // Remove the shared overlay only if both features are being cleaned up
+      if (player.jumpOverlay && !player.container.querySelector(`.${player.options.classPrefix}jumpback-button`)) {
+        player.jumpOverlay.parentNode.removeChild(player.jumpOverlay);
+        player.jumpOverlay = null;
+        player.jumpText = null;
+      }
+    }
   }
 
   // Other optional public methods (all documented according to JSDoc specifications)
@@ -292,10 +449,12 @@ console.log('MediaElementPlayer prototype updated with speed control methods');
                         })
                     }
                     var r = $("#recorded-lessons-js")[0]
-                      , c = ["playpause", "current", "progress", "duration", "volume", "contextmenu", "fullscreen", "quality", "changespeed"]
+                      , c = ["playpause", "current", "progress", "duration", "volume", "contextmenu", "fullscreen", "quality", "jumpback", "jumpforward", "changespeed"]
                       , l = $(r).mediaelementplayer({
                         defaultSpeed: '1.00',
                         speeds: ['1.25','1.50', '2.00'],
+                        jumpForwardInterval: 15,
+                        jumpBackInterval: 15,
                         features: c,
                         success: function d(e, n) {
                             console.log('MediaElementPlayer initialized with speed control');
