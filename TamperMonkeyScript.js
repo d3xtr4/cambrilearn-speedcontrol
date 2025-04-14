@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Speed Button for MediaElementPlayer
-// @version      1.2
-// @description  Adds a speed control button to MediaElementPlayer with fallback if buildspeed is unavailable. Enjoy your 2x learning.
+// @version      1.3
+// @description  Adds a speed control button and Jump to MediaElementPlayer with fallback if buildspeed is unavailable. Enjoy your 2x learning.
 // @author       D3xtr4
 // @match        https://www.cambrilearn.com/*
 // @grant        Public
