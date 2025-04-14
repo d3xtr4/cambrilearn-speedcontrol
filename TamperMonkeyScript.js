@@ -85,7 +85,7 @@ style.textContent = `
     height: 40px;
     line-height: 10px;
     margin: 0;
-    width: 32px;
+    width: 50px;
     padding: 0;
     display: flex;
     align-items: center;
@@ -132,7 +132,7 @@ Object.assign(MediaElementPlayer.prototype, {
     const t = this;
     const jumpBackButton = document.createElement('div');
     jumpBackButton.className = `${t.options.classPrefix}button ${t.options.classPrefix}jumpback-button`;
-    jumpBackButton.innerHTML = `<button type="button" aria-controls="${t.id}" title="Jump Back" aria-label="Jump Back" tabindex="0"><<</button>`;
+    jumpBackButton.innerHTML = `<button type="button" aria-controls="${t.id}" title="Jump Back" aria-label="Jump Back" tabindex="0"><img src="https://raw.githubusercontent.com/d3xtr4/cambrilearn-speedcontrol/refs/heads/main/left%20arrow.png" alt="Jump Back"></button>`;
     
     t.addControlElement(jumpBackButton);
 
@@ -182,7 +182,7 @@ Object.assign(MediaElementPlayer.prototype, {
     const t = this;
     const jumpForwardButton = document.createElement('div');
     jumpForwardButton.className = `${t.options.classPrefix}button ${t.options.classPrefix}jumpforward-button`;
-    jumpForwardButton.innerHTML = `<button type="button" aria-controls="${t.id}" title="Jump Forward" aria-label="Jump Forward" tabindex="0">>></button>`;
+    jumpForwardButton.innerHTML = `<button type="button" aria-controls="${t.id}" title="Jump Forward" aria-label="Jump Forward" tabindex="0"><img src="https://raw.githubusercontent.com/d3xtr4/cambrilearn-speedcontrol/refs/heads/main/right%20arrow.png" alt="Jump Forward"></button>`;
     
     t.addControlElement(jumpForwardButton);
 
